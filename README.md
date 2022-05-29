@@ -1,6 +1,7 @@
 # 𝑯𝒆𝒍𝒍𝒐👋
 
-<img align="center" alt="gifzin" height="350" style="border-radius:5px;" src="gif1">
+![gif](https://pa1.narvii.com/6972/95a4ed82a9507d5f9cf0e6d76073f1f7a3209782r1-500-278_hq.gif)
+
 
 
 ## **About Me**
