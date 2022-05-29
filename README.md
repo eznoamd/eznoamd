@@ -68,41 +68,6 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 [![made-with-Markdown](https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](http://commonmark.org)
 [![made-with-HTML](https://img.shields.io/badge/Made%20with-HTML-ff9900.svg)](https://html.com/about/)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ***
 > "A felicidade de sua vida depende da qualidade de seus pensamentos."  
 -Marco Aurélio
