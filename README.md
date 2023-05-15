@@ -29,35 +29,31 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 
 ## Other Iformation
 
-### My favourites 
-- **Anime Are**
-   - My Hero Academia
-   - One Punch Man
-   - One Piece
 - **Games Are**
-   - Terraria
+   - AC IV-Black Flag
    - Minecraft
    - GTA V
 - **Films and Series Are**
-   - Stranger Things
+   - Blade Runner 2049
    - Breaking Bad
-   - Peaky Blinders
-- **Musics Are**
-   - Blinding Lights
-   - Save Yours Tears
-   - There's Nothing Holdin Me Back
-
+   - 
 
 ### I'm studying this programming languages
 
-- 👨🏻‍💻 C
+- ⌨️ C;
+- 🖥 Python;
+- 📟 GML;
+- 💻 HTML;
+- 💻 CSS;
+- 💻 Javascript;
+- 💻 PHP;
 
 
 ### I'm pretend learn This programming languages
 
-- ⌨️ Java
-- 🖥 C++
-- 📟 C#
+- ⌨️ Java;
+- 🖥 C++;
+- 📟 C#;
 
 ***
 
