@@ -36,7 +36,6 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 - **Films and Series Are**
    - Blade Runner 2049
    - Breaking Bad
-   - 
 
 ### I'm studying this programming languages
 
