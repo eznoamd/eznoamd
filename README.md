@@ -27,32 +27,15 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 - 🎵 Listen Music
 
 
-## Other Iformation
-
-- **Games Are**
-   - AC IV-Black Flag
-   - Minecraft
-   - GTA V
-- **Films and Series Are**
-   - Blade Runner 2049
-   - Breaking Bad
-
 ### I'm studying this programming languages
 
 - ⌨️ C;
+- ⌨️ C#;
 - 🖥 Python;
 - 📟 GML;
-- 💻 HTML;
-- 💻 CSS;
 - 💻 Javascript;
-- 💻 PHP;
-
-
-### I'm pretend learn This programming languages
-
-- ⌨️ Java;
-- 🖥 C++;
-- 📟 C#;
+- 👵 PHP;
+- 👵 Java;
 
 ***
 
