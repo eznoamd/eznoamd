@@ -1,8 +1,8 @@
 # 𝑯𝒆𝒍𝒍𝒐👋
 
 <div style="width:100%">
-  <img src="https://pa1.narvii.com/6972/95a4ed82a9507d5f9cf0e6d76073f1f7a3209782r1-500-278_hq.gif" style="width:100%" />
-</div>div>
+  <img src="https://pa1.narvii.com/6972/95a4ed82a9507d5f9cf0e6d76073f1f7a3209782r1-500-278_hq.gif" style="width:100em" />
+</div>
 
 ## **About Me**
 
