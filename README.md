@@ -18,15 +18,6 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 ***
 
 
-## My Hobbies Are
-
-- 💻 Browse in the Computer
-- 🎮 Play Videogames
-- 🎞 Watch Animes
-- 🎬 Watch Films and Series
-- 🎵 Listen Music
-
-
 ### I'm studying this programming languages
 
 - ⌨️ C;
