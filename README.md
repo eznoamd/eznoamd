@@ -12,7 +12,7 @@ My name is Enzo Augusto I born in Santa Maria - RS and I'm studying computing in
 
 <div align="left">
   <a href="https://github.com/eznoamd">
-  <img height="200em" src="https://github-readme-stats.vercel.app/api?username=eznoamd&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true"/>
+  <img width="100%" src="https://github-readme-stats.vercel.app/api?username=eznoamd&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true"/>
 </div>
 
 ***
