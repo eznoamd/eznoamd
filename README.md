@@ -9,11 +9,11 @@
 My name is **Enzo Augusto**, I'm from **Santa Maria - RS**, and I'm currently studying **Computer Engineering** at [UFSM](https://www.ufsm.br/).  
 I have experience working on web, mobile, desktop and academic projects, and I'm always looking to expand my skills in development and software architecture.
 
-<center><div style="width:300px">
+<div style="width: 50%; margin: 0 auto; display: flex; justify-content: center;">
   <a href="https://github.com/eznoamd">
-    <img src="https://github-readme-stats.vercel.app/api?username=eznoamd&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true" style="width:100%" />
+    <img src="https://github-readme-stats.vercel.app/api?username=eznoamd&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true" style="width: 50%;" />
   </a>
-</div></center>
+</div>
 
 ***
 
