@@ -88,9 +88,6 @@ I have experience working on web, mobile, desktop and academic projects, and I'm
   - SOURCE (Source path)
   - MICROSERVICES
 - Experience with documentation and organization (ADS)
-  - Use Cases
-  - Classes Model
-  - Activity Model
 - Experience with Object Oriented Programming (OOP)
 ***
 
