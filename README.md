@@ -13,7 +13,7 @@ I have experience working on web, mobile, desktop and academic projects, and I'm
 
 # Technical Skills
 
-## Programming Languages
+## Programming and Markup Languages
 
 <p>
   <img src="https://img.shields.io/badge/-C-00599C?style=for-the-badge&logo=c&logoColor=white" />
@@ -22,6 +22,11 @@ I have experience working on web, mobile, desktop and academic projects, and I'm
   <img src="https://img.shields.io/badge/-PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" />
   <img src="https://img.shields.io/badge/-R-276DC3?style=for-the-badge&logo=r&logoColor=white" />
   <img src="https://img.shields.io/badge/-GML-8B00FF?style=for-the-badge&logo=gamemaker&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Java-ED8B00?style=for-the-badge&logo=java&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Rust-000000?style=for-the-badge&logo=rust&logoColor=white" />
+  <img src="https://img.shields.io/badge/-HTML-edb11a?style=for-the-badge&logo=html5&logoColor=white"/>
+  <img src="https://img.shields.io/badge/-XML-656b3a?style=for-the-badge&logo=xml&logoColor=white"/>
+  <img src="https://img.shields.io/badge/-JSON-000000?style=for-the-badge&logo=json&logoColor=white"/>
 </p>
 
 ## Frameworks & Libraries
@@ -34,6 +39,8 @@ I have experience working on web, mobile, desktop and academic projects, and I'm
   <img src="https://img.shields.io/badge/-TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
   <img src="https://img.shields.io/badge/-Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white" />
   <img src="https://img.shields.io/badge/-Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" />
+  <img src="https://img.shields.io/badge/wgpu-40E0D0.svg?style=for-the-badge&logo=wgpu&logoColor=white" />
+  <img src="https://img.shields.io/badge/wgpu-40E0D0.svg?style=for-the-badge&logo=wgpu&logoColor=white" />
 
 </p>
 
@@ -55,7 +62,6 @@ I have experience working on web, mobile, desktop and academic projects, and I'm
   <img src="https://img.shields.io/badge/-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
   <img src="https://img.shields.io/badge/-Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" />
   <img src="https://img.shields.io/badge/-C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Java-ED8B00?style=for-the-badge&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
   <img src="https://img.shields.io/badge/-Materialize%20CSS-EE6E73?style=for-the-badge&logo=materializecss&logoColor=white" />
   <img src="https://img.shields.io/badge/-Unity-000000?style=for-the-badge&logo=unity&logoColor=white" />
