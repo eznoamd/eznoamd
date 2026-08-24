@@ -55,8 +55,7 @@ def generate_svg(card: CardData) -> str:
         build_status_stats_section,
         build_languages_section,
         build_stack_section,
-        build_current_section,
-        build_featured_section,
+        build_current_featured_section,
         build_journey_section,
         build_organizations_section,
         build_network_section,
@@ -232,51 +231,60 @@ def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionRe
     return "".join(frag), y
 
 
-def build_current_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
+def build_current_featured_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
     theme = card.theme
     items = card.current
-    if not items:
-        return None, y
-
-    frag = []
-    label, y = _section_label(x, y, "current.process", theme)
-    frag.append(label)
-
-    for i, item in enumerate(items, start=1):
-        frag.append(_text(x + 8, y + 13, f"[{i:02d}] {item.upper()}", size=12, color=theme["foreground"]))
-        y += LINE_HEIGHT
-    y += SECTION_GAP
-
-    return "".join(frag), y
-
-
-def build_featured_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
-    theme = card.theme
     featured = card.featured
-    if not featured:
+    if not items and not featured:
         return None, y
 
+    col_gap = 24
+    col_width = (width - col_gap) / 2
+    left_x = x
+    right_x = x + col_width + col_gap
+
     frag = []
-    label, y = _section_label(x, y, "featured.project", theme)
-    frag.append(label)
+    content_y = y
+    if items:
+        label, content_y = _section_label(left_x, y, "current.process", theme)
+        frag.append(label)
+    if featured:
+        label, content_y = _section_label(right_x, y, "featured.project", theme)
+        frag.append(label)
 
-    frag.append(_text(x + 8, y + 14, featured["name"], size=14, color=theme["foreground"], weight="bold"))
-    y += 22
+    left_y = content_y
+    for i, item in enumerate(items, start=1):
+        frag.append(_text(left_x + 8, left_y + 13, f"[{i:02d}] {item.upper()}", size=12, color=theme["foreground"]))
+        left_y += LINE_HEIGHT
+    left_end = left_y
 
-    if featured.get("description"):
-        for line in _wrap_text(featured["description"], max_chars=90):
-            frag.append(_text(x + 8, y + 10, line, size=12, color=theme["muted"]))
-            y += 16
-        y += 4
+    right_y = content_y
+    if featured:
+        max_chars = max(20, int((col_width - 8) / 8))
 
-    if featured.get("language"):
-        frag.append(_text(x + 8, y + 13, featured["language"], size=12, color=theme["accent_secondary"]))
-        y += LINE_HEIGHT
+        frag.append(_text(right_x + 8, right_y + 14, featured["name"], size=14, color=theme["foreground"], weight="bold"))
+        right_y += 22
 
-    frag.append(_kv_text(x + 8, y + 13, "STARS", str(featured.get("stars", 0)), theme, label_chars=8))
-    y += LINE_HEIGHT
-    y += SECTION_GAP
+        if featured.get("description"):
+            for line in _wrap_text(featured["description"], max_chars=max_chars):
+                frag.append(_text(right_x + 8, right_y + 10, line, size=12, color=theme["muted"]))
+                right_y += 16
+            right_y += 4
 
+        if featured.get("language"):
+            frag.append(_text(right_x + 8, right_y + 13, featured["language"], size=12, color=theme["accent_secondary"]))
+            right_y += LINE_HEIGHT
+
+        frag.append(_kv_text(right_x + 8, right_y + 13, "STARS", str(featured.get("stars", 0)), theme, label_chars=8))
+        right_y += LINE_HEIGHT
+    right_end = right_y
+
+    section_end = max(left_end, right_end)
+    if items and featured:
+        divider_x = right_x - col_gap / 2
+        frag.append(_hline_v(divider_x, content_y - 4, section_end - 4, theme["muted"], opacity=0.25))
+
+    y = section_end + SECTION_GAP
     return "".join(frag), y
 
 
