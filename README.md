@@ -1,7 +1,11 @@
 # 𝑯𝒆𝒍𝒍𝒐 👋
 
 <div style="width:100%; margin: 0 auto; display: flex; justify-content: center;" align="center">
-  <img src="gif1.gif" style="width:100%" />
+  <img src="src/gif1.gif" style="width:100%" />
+</div>
+
+<div align="center">
+  <img src="profile-card/output/card.svg" alt="Enzo Augusto — system profile card" />
 </div>
 
 ## **About Me**

@@ -1,0 +1,51 @@
+profile:
+  name: "Enzo Augusto"
+  username: "eznoamd"
+  title: "Computer Engineering Student"
+  description: "Building systems from silicon to software."
+  location: "Santa Maria - RS, Brasil"
+
+current:
+  - "Computer Architecture"
+  - "Embedded Systems"
+  - "Backend Development"
+
+stack:
+  backend: [Python, Flask, Django]
+  frontend: [JavaScript, Vue, Nuxt, TailwindCSS]
+  systems: [C, "C++", Linux]
+  mobile: []
+
+journey:
+  - {year: 2023, focus: "Web Development"}
+  - {year: 2024, focus: "Backend / APIs"}
+  - {year: 2025, focus: "Mobile / Data"}
+  - {year: 2026, focus: "Systems / Embedded"}
+
+featured:
+  enabled: true
+  repository: ""
+
+organizations: []
+# - {name: "org-login", display: true, description: "...", url: "https://github.com/org-login"}
+
+languages:
+  max_shown: 5
+  exclude_forks: true
+  exclude_repos: []
+
+activity:
+  weeks: 12
+
+system:
+  mode: "DEVELOPMENT"
+
+theme:
+  background: "#0a0e12"
+  surface: "#10151b"
+  foreground: "#d6e2e8"
+  muted: "#5c6b73"
+  accent: "#39d353"
+  accent_secondary: "#58a6ff"
+  font_family: "'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace"
+  width: 800
