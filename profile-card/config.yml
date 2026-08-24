@@ -2,40 +2,44 @@ profile:
   name: "Enzo Augusto"
   username: "eznoamd"
   title: "Computer Engineering Student"
-  description: "Building systems from silicon to software."
+  description: "Building systems from 'silicon' to software."
   location: "Santa Maria - RS, Brasil"
 
 current:
-  - "Computer Architecture"
   - "Embedded Systems"
   - "Backend Development"
+  - "Server Creation"
+  - "Advanced Web Development"
 
 stack:
-  backend: [Python, Flask, Django]
+  backend: [Python, Java, JS, PHP, Rust]
+  frameworks: [Flask, FastAPI, Django, Spring Boot, Laravel, WGPU, Nuxt]
   frontend: [JavaScript, Vue, Nuxt, TailwindCSS]
   systems: [C, "C++", Linux]
-  mobile: []
+  mobile: [Java, Flutter]
 
 journey:
-  - {year: 2023, focus: "Web Development"}
-  - {year: 2024, focus: "Backend / APIs"}
-  - {year: 2025, focus: "Mobile / Data"}
-  - {year: 2026, focus: "Systems / Embedded"}
+  - {year: 2022, focus: "Learning Algorithms / Web Development"}
+  - {year: 2023, focus: "Backend / APIs / IOT / Data"}
+  - {year: 2024, focus: "Mobile / Work Experience"}
+  - {year: 2025, focus: "Systems / Embedded / Computer Architecture"}
+  - {year: 2026, focus: "Improving Skills / Open Source / Contributing"}
 
 featured:
   enabled: true
   repository: ""
 
-organizations: []
-# - {name: "org-login", display: true, description: "...", url: "https://github.com/org-login"}
+organizations: [
+  {name: "Projeto Apolo", display: true, description: "Projeto Apolo is a free online tool developed to assist with the sizing and budgeting of photovoltaic systems.", url: "https://github.com/ProjetoApolo"}
+]
 
 languages:
-  max_shown: 5
+  max_shown: 8
   exclude_forks: true
   exclude_repos: []
 
 activity:
-  weeks: 12
+  weeks: 40
 
 system:
   mode: "DEVELOPMENT"
