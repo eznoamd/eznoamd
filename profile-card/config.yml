@@ -45,7 +45,7 @@ contacts:
 languages:
   max_shown: 8
   exclude_forks: true
-  exclude_repos: []
+  exclude_repos: ["nand-to-tetris"]
 
 system:
   mode: "DEVELOPMENT"
