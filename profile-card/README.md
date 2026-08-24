@@ -27,9 +27,9 @@ This writes `profile-card/output/card.svg`. Open it directly in a browser
 repo's `README.md` in a Markdown previewer that renders local images.
 
 Unauthenticated runs work fine for a quick check (GitHub allows 60
-requests/hour without a token) but skip the `github.activity` section, since
-that needs a token (see below). Set `CARD_TOKEN` in your shell before running
-to test the full card locally:
+requests/hour without a token) but skip the `CONTRIBUTIONS` row in
+`github.stats`, since that needs a token (see below). Set `CARD_TOKEN` in
+your shell before running to test the full card locally:
 
 ```bash
 CARD_TOKEN=ghp_xxx python3 profile-card/generate_card.py
@@ -52,12 +52,12 @@ for the cron schedule. Check the run logs, then confirm
 changed) and that it renders correctly in the README on the repo's main
 page.
 
-## Enabling the contributions/activity section
+## Enabling the CONTRIBUTIONS stat
 
 GitHub's REST API has no "total contributions" endpoint — only GraphQL does,
 and it needs a real user token (the default `GITHUB_TOKEN` Actions injects
-can't resolve it for an arbitrary user). Without a token, that section is
-simply omitted; everything else still renders.
+can't resolve it for an arbitrary user). Without a token, that row is simply
+omitted from `github.stats`; everything else still renders.
 
 To enable it:
 
@@ -70,6 +70,6 @@ To enable it:
 ## Configuration
 
 All manually-curated content (name, current focus, tech stack, journey,
-featured project override, organizations, theme colors) lives in
+featured project override, organizations, contacts, theme colors) lives in
 `config.yml`. Anything derived from the GitHub API (repo count, followers,
-stars, languages, contributions) is never hand-edited.
+stars, languages, contributions, account uptime) is never hand-edited.

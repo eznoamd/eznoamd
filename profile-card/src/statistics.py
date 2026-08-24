@@ -15,11 +15,10 @@ class ProfileStats:
     contributions: int | None
 
 
-def compute_stats(user: dict | None, repos: list[dict], calendar: dict | None) -> ProfileStats:
+def compute_stats(user: dict | None, repos: list[dict], contributions: int | None) -> ProfileStats:
     public_repos = user.get("public_repos", len(repos)) if user else len(repos)
     followers = user.get("followers", 0) if user else 0
     stars = sum(r.get("stargazers_count", 0) for r in repos if not r.get("fork"))
-    contributions = calendar.get("total") if calendar else None
 
     return ProfileStats(
         public_repos=public_repos,

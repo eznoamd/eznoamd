@@ -30,16 +30,22 @@ featured:
   repository: ""
 
 organizations: [
-  {name: "Projeto Apolo", display: true, description: "Projeto Apolo is a free online tool developed to assist with the sizing and budgeting of photovoltaic systems.", url: "https://github.com/ProjetoApolo"}
+  {
+    name: "Projeto Apolo", 
+    display: true, 
+    description: "Projeto Apolo is a free online tool developed to assist with the sizing and budgeting of photovoltaic systems.", 
+    url: "https://github.com/ProjetoApolo/ . https://projetoapolo.com/"}
 ]
+
+contacts:
+  - {port: 22, proto: ssh, label: github, value: "github.com/eznoamd"}
+  - {port: 443, proto: https, label: lattes, value: "lattes.cnpq.br/9623552939876433"}
+  - {port: 25, proto: smtp, label: mail, value: "enzo.domingues@acad.ufsm.br"}
 
 languages:
   max_shown: 8
   exclude_forks: true
   exclude_repos: []
-
-activity:
-  weeks: 40
 
 system:
   mode: "DEVELOPMENT"

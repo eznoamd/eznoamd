@@ -28,11 +28,24 @@ def load_config(path: Path) -> dict:
         return yaml.safe_load(f)
 
 
-def build_card_data(config: dict, user: dict | None, repos: list[dict], calendar: dict | None,
+def format_uptime(created_at: str | None) -> str | None:
+    if not created_at:
+        return None
+    try:
+        created = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+    days = (datetime.now(timezone.utc) - created).days
+    years, remaining_days = divmod(days, 365)
+    return f"{years}y {remaining_days}d" if years else f"{remaining_days}d"
+
+
+def build_card_data(config: dict, user: dict | None, repos: list[dict], contributions: int | None,
                      languages: list, featured_repo: dict | None) -> CardData:
     profile = config["profile"]
 
-    stats = compute_stats(user, repos, calendar)
+    stats = compute_stats(user, repos, contributions)
 
     stack = {
         category: items
@@ -54,6 +67,7 @@ def build_card_data(config: dict, user: dict | None, repos: list[dict], calendar
         "user": profile["username"],
         "role": profile["title"].upper(),
         "build": datetime.now(timezone.utc).strftime("%Y.%m.%d %H:%M UTC"),
+        "uptime": format_uptime(user.get("created_at") if user else None),
         "mode": (config.get("system") or {}).get("mode"),
     }
 
@@ -72,11 +86,11 @@ def build_card_data(config: dict, user: dict | None, repos: list[dict], calendar
             "contributions": stats.contributions,
         },
         languages=languages,
-        activity=calendar,
         stack=stack,
         featured=featured,
         journey=config.get("journey") or [],
         organizations=config.get("organizations") or [],
+        contacts=config.get("contacts") or [],
         generated_at=f"GENERATED {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
     )
 
@@ -97,7 +111,7 @@ def main() -> int:
     # up featuring itself.
     repos = [r for r in all_repos if r.get("name", "").lower() != username.lower()]
 
-    calendar = client.get_contribution_calendar(config.get("activity", {}).get("weeks", 12))
+    contributions = client.get_total_contributions()
 
     lang_cfg = config.get("languages", {}) or {}
     lang_bytes = aggregate_languages(
@@ -110,7 +124,7 @@ def main() -> int:
 
     featured_repo = select_featured_repo(repos, config)
 
-    card = build_card_data(config, user, repos, calendar, languages, featured_repo)
+    card = build_card_data(config, user, repos, contributions, languages, featured_repo)
     svg = generate_svg(card)
 
     output_dir = BASE_DIR / "output"

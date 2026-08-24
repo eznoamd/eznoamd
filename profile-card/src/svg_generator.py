@@ -30,11 +30,11 @@ class CardData:
     current: list
     stats: dict
     languages: list
-    activity: dict | None
     stack: dict
     featured: dict | None
     journey: list
     organizations: list
+    contacts: list
     generated_at: str
 
 
@@ -45,19 +45,21 @@ def generate_svg(card: CardData) -> str:
     y = MARGIN
 
     fragments = []
+    boot, y = build_boot_section(card, x, y, width)
+    fragments.append(boot)
+
     header, y = build_header(card, x, y, width)
     fragments.append(header)
 
     for builder in (
-        build_status_section,
-        build_stats_section,
+        build_status_stats_section,
         build_languages_section,
-        build_activity_section,
         build_stack_section,
         build_current_section,
         build_featured_section,
         build_journey_section,
         build_organizations_section,
+        build_network_section,
     ):
         frag, y = builder(card, x, y, width)
         if frag:
@@ -69,13 +71,37 @@ def generate_svg(card: CardData) -> str:
     return _wrap_svg(total_height=y + MARGIN, theme=theme, body="".join(fragments))
 
 
+def build_boot_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
+    theme = card.theme
+    lines = [
+        f"boot sequence initiated :: {card.username}",
+        "mounting /dev/skills ...",
+        "loading kernel modules: c, python, embedded",
+    ]
+
+    frag = []
+    for line in lines:
+        frag.append(
+            f'<text x="{x:.1f}" y="{y + 10:.1f}" font-size="10">'
+            f'<tspan fill="{theme["accent"]}">[ OK ]</tspan>'
+            f'<tspan fill="{theme["muted"]}"> {_escape(line)}</tspan>'
+            f"</text>"
+        )
+        y += 14
+    y += 10
+
+    return "".join(frag), y
+
+
 def build_header(card: CardData, x: int, y: int, width: int) -> SectionResult:
     theme = card.theme
     frag = [
         _text(x, y + 12, f"SYSTEM PROFILE :: {card.username.upper()}", size=12,
               color=theme["accent_secondary"], weight="bold"),
     ]
-    y += 30
+    y += 20
+    frag.append(_hline(x, y, width, theme["muted"], opacity=0.3))
+    y += 10
 
     frag.append(_text(x, y + 20, card.name, size=24, color=theme["foreground"], weight="bold"))
     y += 32
@@ -96,56 +122,68 @@ def build_header(card: CardData, x: int, y: int, width: int) -> SectionResult:
     return "".join(frag), y
 
 
-def build_status_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
+def build_status_stats_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
     theme = card.theme
     status = card.status
-    if not status:
-        return None, y
-
-    frag = []
-    label, y = _section_label(x, y, "> system.status", theme)
-    frag.append(label)
-
-    rows = [
-        ("STATUS", status.get("status", "ONLINE")),
-        ("USER", status.get("user", "")),
-        ("ROLE", status.get("role", "")),
-        ("BUILD", status.get("build", "")),
-    ]
-    if status.get("mode"):
-        rows.append(("MODE", status["mode"]))
-
-    for label_text, value in rows:
-        frag.append(_kv_text(x + 8, y + 13, label_text, value, theme))
-        y += LINE_HEIGHT
-    y += SECTION_GAP
-
-    return "".join(frag), y
-
-
-def build_stats_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
-    theme = card.theme
     stats = card.stats
-    if not stats:
+    if not status and not stats:
         return None, y
 
+    col_gap = 24
+    col_width = (width - col_gap) / 2
+    left_x = x
+    right_x = x + col_width + col_gap
+
+    left_rows = []
+    if status:
+        left_rows = [
+            ("STATUS", status.get("status", "ONLINE")),
+            ("USER", status.get("user", "")),
+            ("ROLE", status.get("role", "")),
+            ("BUILD", status.get("build", "")),
+        ]
+        if status.get("uptime"):
+            left_rows.append(("UPTIME", status["uptime"]))
+        if status.get("mode"):
+            left_rows.append(("MODE", status["mode"]))
+
+    right_rows = []
+    if stats:
+        right_rows = [
+            ("REPOSITORIES", str(stats.get("public_repos", 0))),
+            ("FOLLOWERS", str(stats.get("followers", 0))),
+            ("STARS", str(stats.get("stars", 0))),
+        ]
+        if stats.get("contributions") is not None:
+            right_rows.append(("CONTRIBUTIONS", str(stats["contributions"])))
+
     frag = []
-    label, y = _section_label(x, y, "> github.stats", theme)
-    frag.append(label)
+    content_y = y
+    if left_rows:
+        label, content_y = _section_label(left_x, y, "system.status", theme)
+        frag.append(label)
+    if right_rows:
+        label, content_y = _section_label(right_x, y, "github.stats", theme)
+        frag.append(label)
 
-    rows = [
-        ("REPOSITORIES", str(stats.get("public_repos", 0))),
-        ("FOLLOWERS", str(stats.get("followers", 0))),
-        ("STARS", str(stats.get("stars", 0))),
-    ]
-    if stats.get("contributions") is not None:
-        rows.append(("CONTRIBUTIONS", str(stats["contributions"])))
+    row_y = content_y
+    for label_text, value in left_rows:
+        frag.append(_kv_text(left_x + 8, row_y + 13, label_text, value, theme))
+        row_y += LINE_HEIGHT
+    left_end = row_y
 
-    for label_text, value in rows:
-        frag.append(_kv_text(x + 8, y + 13, label_text, value, theme))
-        y += LINE_HEIGHT
-    y += SECTION_GAP
+    row_y = content_y
+    for label_text, value in right_rows:
+        frag.append(_kv_text(right_x + 8, row_y + 13, label_text, value, theme))
+        row_y += LINE_HEIGHT
+    right_end = row_y
 
+    section_end = max(left_end, right_end)
+    if left_rows and right_rows:
+        divider_x = right_x - col_gap / 2
+        frag.append(_hline_v(divider_x, content_y - 4, section_end - 4, theme["muted"], opacity=0.25))
+
+    y = section_end + SECTION_GAP
     return "".join(frag), y
 
 
@@ -156,7 +194,7 @@ def build_languages_section(card: CardData, x: int, y: int, width: int) -> Secti
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> system.languages", theme)
+    label, y = _section_label(x, y, "system.languages", theme)
     frag.append(label)
 
     name_col = 130
@@ -174,38 +212,6 @@ def build_languages_section(card: CardData, x: int, y: int, width: int) -> Secti
     return "".join(frag), y
 
 
-def build_activity_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
-    theme = card.theme
-    activity = card.activity
-    if not activity:
-        return None, y
-
-    frag = []
-    label, y = _section_label(x, y, "> github.activity", theme)
-    frag.append(label)
-
-    weeks = activity.get("weeks", [])
-    total = activity.get("total", 0)
-    frag.append(_text(x + 8, y + 13, f"TOTAL: {total} (last {len(weeks)}w)", size=12, color=theme["muted"]))
-    y += LINE_HEIGHT + 6
-
-    if total <= 0:
-        frag.append(_text(x + 8, y + 13, "NO RECENT ACTIVITY LOGGED", size=12, color=theme["muted"]))
-        y += LINE_HEIGHT
-    else:
-        cell, gap = 10, 3
-        grid_x, grid_y = x + 8, y
-        for week_idx, week in enumerate(weeks):
-            for day in week:
-                cx = grid_x + week_idx * (cell + gap)
-                cy = grid_y + day.get("weekday", 0) * (cell + gap)
-                frag.append(_activity_cell(cx, cy, cell, day.get("count", 0), theme))
-        y += 7 * (cell + gap)
-    y += SECTION_GAP
-
-    return "".join(frag), y
-
-
 def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
     theme = card.theme
     stack = card.stack
@@ -213,7 +219,7 @@ def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionRe
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> system.stack", theme)
+    label, y = _section_label(x, y, "system.stack", theme)
     frag.append(label)
 
     for category, items in stack.items():
@@ -233,7 +239,7 @@ def build_current_section(card: CardData, x: int, y: int, width: int) -> Section
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> current.process", theme)
+    label, y = _section_label(x, y, "current.process", theme)
     frag.append(label)
 
     for i, item in enumerate(items, start=1):
@@ -251,7 +257,7 @@ def build_featured_section(card: CardData, x: int, y: int, width: int) -> Sectio
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> featured.project", theme)
+    label, y = _section_label(x, y, "featured.project", theme)
     frag.append(label)
 
     frag.append(_text(x + 8, y + 14, featured["name"], size=14, color=theme["foreground"], weight="bold"))
@@ -281,7 +287,7 @@ def build_journey_section(card: CardData, x: int, y: int, width: int) -> Section
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> profile.journey", theme)
+    label, y = _section_label(x, y, "profile.journey", theme)
     frag.append(label)
 
     for entry in journey:
@@ -299,7 +305,7 @@ def build_organizations_section(card: CardData, x: int, y: int, width: int) -> S
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "> profile.organizations", theme)
+    label, y = _section_label(x, y, "profile.organizations", theme)
     frag.append(label)
 
     for org in orgs:
@@ -314,6 +320,33 @@ def build_organizations_section(card: CardData, x: int, y: int, width: int) -> S
             y += 16
         y += 6
     y += SECTION_GAP - 6
+
+    return "".join(frag), y
+
+
+def build_network_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
+    theme = card.theme
+    contacts = card.contacts
+    if not contacts:
+        return None, y
+
+    frag = []
+    label, y = _section_label(x, y, "network.ports", theme)
+    frag.append(label)
+
+    port_col, state_col, proto_col, label_col = 70, 50, 60, 90
+    for contact in contacts:
+        row_y = y + 13
+        frag.append(_text(x + 8, row_y, f"{contact.get('port', '')}/tcp", size=12, color=theme["foreground"]))
+        frag.append(_text(x + 8 + port_col, row_y, "OPEN", size=12, color=theme["accent"]))
+        frag.append(_text(x + 8 + port_col + state_col, row_y, str(contact.get("proto", "")).upper(),
+                           size=12, color=theme["muted"]))
+        frag.append(_text(x + 8 + port_col + state_col + proto_col, row_y, str(contact.get("label", "")).upper(),
+                           size=12, color=theme["accent_secondary"]))
+        frag.append(_text(x + 8 + port_col + state_col + proto_col + label_col, row_y,
+                           str(contact.get("value", "")), size=12, color=theme["muted"]))
+        y += LINE_HEIGHT
+    y += SECTION_GAP
 
     return "".join(frag), y
 
@@ -342,7 +375,7 @@ def _wrap_svg(total_height: int, theme: dict, body: str) -> str:
         f'<style>text {{ font-family: {theme["font_family"]}; }}</style>'
         f'<rect x="0" y="0" width="{width}" height="{total_height}" fill="{theme["background"]}" />'
         f'<rect x="3" y="3" width="{width - 6}" height="{total_height - 6}" fill="none" '
-        f'stroke="{theme["muted"]}" stroke-opacity="0.4" stroke-width="1" rx="6" />'
+        f'stroke="{theme["muted"]}" stroke-opacity="0.5" stroke-width="1" rx="0" />'
         f"{body}"
         f"</svg>"
     )
@@ -365,12 +398,16 @@ def _kv_text(x, y, label, value, theme, label_chars=14, size=12) -> str:
     )
 
 
-def _section_label(x, y, text, theme) -> tuple[str, int]:
-    return _text(x, y + 13, text, size=13, color=theme["accent_secondary"], weight="bold"), y + SECTION_LABEL_HEIGHT
+def _section_label(x, y, key, theme) -> tuple[str, int]:
+    return _text(x, y + 13, f"> {key}", size=13, color=theme["accent_secondary"], weight="bold"), y + SECTION_LABEL_HEIGHT
 
 
-def _hline(x, y, width, color) -> str:
-    return f'<line x1="{x}" y1="{y}" x2="{x + width}" y2="{y}" stroke="{color}" stroke-width="1" opacity="0.5" />'
+def _hline(x, y, width, color, opacity=0.5) -> str:
+    return f'<line x1="{x}" y1="{y}" x2="{x + width}" y2="{y}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
+
+
+def _hline_v(x, y1, y2, color, opacity=0.5) -> str:
+    return f'<line x1="{x:.1f}" y1="{y1:.1f}" x2="{x:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
 
 
 def _bar(x, y, width, pct, theme, height=8) -> str:
@@ -379,19 +416,6 @@ def _bar(x, y, width, pct, theme, height=8) -> str:
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{width:.1f}" height="{height}" fill="{theme["surface"]}" />'
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{fill_w:.1f}" height="{height}" fill="{theme["accent"]}" />'
     )
-
-
-def _activity_cell(cx, cy, cell, count, theme) -> str:
-    if count <= 0:
-        fill, opacity = theme["surface"], 1
-    elif count <= 2:
-        fill, opacity = theme["accent"], 0.35
-    elif count <= 5:
-        fill, opacity = theme["accent"], 0.65
-    else:
-        fill, opacity = theme["accent"], 1
-
-    return f'<rect x="{cx}" y="{cy}" width="{cell}" height="{cell}" rx="2" fill="{fill}" fill-opacity="{opacity}" />'
 
 
 def _wrap_text(text: str, max_chars: int = 90) -> list[str]:

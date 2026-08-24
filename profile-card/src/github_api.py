@@ -22,13 +22,6 @@ query($login: String!) {
     contributionsCollection {
       contributionCalendar {
         totalContributions
-        weeks {
-          contributionDays {
-            contributionCount
-            date
-            weekday
-          }
-        }
       }
     }
   }
@@ -109,7 +102,7 @@ class GitHubClient:
             return {}
         return data if isinstance(data, dict) else {}
 
-    def get_contribution_calendar(self, weeks: int = 12) -> dict | None:
+    def get_total_contributions(self) -> int | None:
         if not self._graphql_token:
             return None
 
@@ -118,26 +111,9 @@ class GitHubClient:
             return None
 
         try:
-            calendar = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+            return data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
         except (KeyError, TypeError):
             return None
-
-        all_weeks = calendar.get("weeks", [])
-        trimmed_weeks = all_weeks[-weeks:] if weeks else all_weeks
-
-        weeks_out = [
-            [
-                {
-                    "date": day.get("date"),
-                    "count": day.get("contributionCount", 0),
-                    "weekday": day.get("weekday", 0),
-                }
-                for day in week.get("contributionDays", [])
-            ]
-            for week in trimmed_weeks
-        ]
-
-        return {"total": calendar.get("totalContributions", 0), "weeks": weeks_out}
 
     def _request(self, method: str, url: str, **kwargs) -> requests.Response | None:
         try:
