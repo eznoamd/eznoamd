@@ -4,7 +4,7 @@
 
 <div style="padding:10px;">
 
-<center>
+<div align="center">
 
   ### You can reach me through:
 
@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/badge/-Lattes-0073A8?style=for-the-badge&logoColor=white" />
   </a>
 
-</center>
+</div>
   
 
   <div style="width:100%; margin-top: 20px; display: flex; justify-content: center;" align="center">
