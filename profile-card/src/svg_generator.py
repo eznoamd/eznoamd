@@ -201,8 +201,9 @@ def build_languages_section(card: CardData, x: int, y: int, width: int) -> Secti
     bar_width = width - 8 - name_col - pct_col
 
     for lang in languages:
+        pct_label = "<1%" if lang.percent == 0 else f"{lang.percent}%"
         frag.append(_text(x + 8, y + 13, lang.name.upper(), size=12, color=theme["foreground"]))
-        frag.append(_text(x + 8 + name_col, y + 13, f"{lang.percent}%", size=12, color=theme["muted"]))
+        frag.append(_text(x + 8 + name_col, y + 13, pct_label, size=12, color=theme["muted"]))
         frag.append(_bar(bar_x, y + 4, bar_width, lang.percent, theme))
         y += LINE_HEIGHT
     y += SECTION_GAP

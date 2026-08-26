@@ -43,7 +43,7 @@ contacts:
   - {port: 25, proto: smtp, label: mail, value: "enzo.domingues@acad.ufsm.br"}
 
 languages:
-  max_shown: 10
+  max_shown: 8
   exclude_forks: true
   exclude_repos: ["nand-to-tetris"]
 
