@@ -65,10 +65,8 @@ def build_card_data(config: dict, user: dict | None, repos: list[dict], contribu
     status = {
         "status": "ONLINE",
         "user": profile["username"],
-        "role": profile["title"].upper(),
         "build": datetime.now(timezone.utc).strftime("%Y.%m.%d %H:%M UTC"),
         "uptime": format_uptime(user.get("created_at") if user else None),
-        "mode": (config.get("system") or {}).get("mode"),
     }
 
     return CardData(

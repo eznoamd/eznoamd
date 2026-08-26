@@ -2,7 +2,7 @@ profile:
   name: "Enzo Augusto"
   username: "eznoamd"
   title: "Computer Engineering Student"
-  description: "Building systems from 'silicon' to software."
+  description: "INTERNET COMPUTING DEVELOPMENT · WEB DEVELOPMENT"
   location: "Santa Maria - RS, Brasil"
 
 current:
@@ -43,12 +43,9 @@ contacts:
   - {port: 25, proto: smtp, label: mail, value: "enzo.domingues@acad.ufsm.br"}
 
 languages:
-  max_shown: 8
+  max_shown: 10
   exclude_forks: true
   exclude_repos: ["nand-to-tetris"]
-
-system:
-  mode: "DEVELOPMENT"
 
 theme:
   background: "#0a0e12"

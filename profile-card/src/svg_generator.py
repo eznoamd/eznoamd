@@ -39,6 +39,7 @@ class CardData:
 
 
 def generate_svg(card: CardData) -> str:
+    _reset_section_counter()
     theme = card.theme
     x = MARGIN
     width = theme["width"] - 2 * MARGIN
@@ -67,7 +68,7 @@ def generate_svg(card: CardData) -> str:
     footer, y = build_footer(card, x, y, width)
     fragments.append(footer)
 
-    return _wrap_svg(total_height=y + MARGIN, theme=theme, body="".join(fragments))
+    return _wrap_svg(total_height=y + MARGIN, theme=theme, body="\n".join(fragments))
 
 
 def build_boot_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -75,21 +76,21 @@ def build_boot_section(card: CardData, x: int, y: int, width: int) -> SectionRes
     lines = [
         f"boot sequence initiated :: {card.username}",
         "mounting /dev/skills ...",
-        "loading kernel modules: c, python, embedded",
+        "loading kernel modules",
     ]
 
     frag = []
     for line in lines:
         frag.append(
-            f'<text x="{x:.1f}" y="{y + 10:.1f}" font-size="10">'
-            f'<tspan fill="{theme["accent"]}">[ OK ]</tspan>'
-            f'<tspan fill="{theme["muted"]}"> {_escape(line)}</tspan>'
-            f"</text>"
+            f'    <text x="{x:.1f}" y="{y + 10:.1f}" font-size="10">\n'
+            f'        <tspan fill="{theme["accent"]}">[ OK ]</tspan>\n'
+            f'        <tspan fill="{theme["muted"]}"> {_escape(line)}</tspan>\n'
+            f"    </text>"
         )
         y += 14
     y += 10
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_header(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -118,7 +119,7 @@ def build_header(card: CardData, x: int, y: int, width: int) -> SectionResult:
     frag.append(_hline(x, y, width, theme["accent"]))
     y += SECTION_GAP
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_status_stats_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -138,13 +139,10 @@ def build_status_stats_section(card: CardData, x: int, y: int, width: int) -> Se
         left_rows = [
             ("STATUS", status.get("status", "ONLINE")),
             ("USER", status.get("user", "")),
-            ("ROLE", status.get("role", "")),
             ("BUILD", status.get("build", "")),
         ]
         if status.get("uptime"):
             left_rows.append(("UPTIME", status["uptime"]))
-        if status.get("mode"):
-            left_rows.append(("MODE", status["mode"]))
 
     right_rows = []
     if stats:
@@ -162,12 +160,13 @@ def build_status_stats_section(card: CardData, x: int, y: int, width: int) -> Se
         label, content_y = _section_label(left_x, y, "system.status", theme)
         frag.append(label)
     if right_rows:
-        label, content_y = _section_label(right_x, y, "github.stats", theme)
+        label, content_y = _section_label(right_x, y, "eznoamd.stats", theme)
         frag.append(label)
 
     row_y = content_y
     for label_text, value in left_rows:
-        frag.append(_kv_text(left_x + 8, row_y + 13, label_text, value, theme))
+        label_chars = 15 if label_text in ("BUILD", "UPTIME") else 14
+        frag.append(_kv_text(left_x + 8, row_y + 13, label_text, value, theme, label_chars=label_chars))
         row_y += LINE_HEIGHT
     left_end = row_y
 
@@ -183,7 +182,7 @@ def build_status_stats_section(card: CardData, x: int, y: int, width: int) -> Se
         frag.append(_hline_v(divider_x, content_y - 4, section_end - 4, theme["muted"], opacity=0.25))
 
     y = section_end + SECTION_GAP
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_languages_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -193,7 +192,7 @@ def build_languages_section(card: CardData, x: int, y: int, width: int) -> Secti
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "system.languages", theme)
+    label, y = _section_label(x, y, "eznoamd.languages", theme)
     frag.append(label)
 
     name_col = 130
@@ -208,7 +207,7 @@ def build_languages_section(card: CardData, x: int, y: int, width: int) -> Secti
         y += LINE_HEIGHT
     y += SECTION_GAP
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -218,7 +217,7 @@ def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionRe
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "system.stack", theme)
+    label, y = _section_label(x, y, "eznoamd.stack", theme)
     frag.append(label)
 
     for category, items in stack.items():
@@ -228,7 +227,7 @@ def build_stack_section(card: CardData, x: int, y: int, width: int) -> SectionRe
         y += LINE_HEIGHT
     y += SECTION_GAP
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_current_featured_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -246,10 +245,10 @@ def build_current_featured_section(card: CardData, x: int, y: int, width: int) -
     frag = []
     content_y = y
     if items:
-        label, content_y = _section_label(left_x, y, "current.process", theme)
+        label, content_y = _section_label(left_x, y, "eznoamd.current.process", theme)
         frag.append(label)
     if featured:
-        label, content_y = _section_label(right_x, y, "featured.project", theme)
+        label, content_y = _section_label(right_x, y, "eznoamd.featured.project", theme)
         frag.append(label)
 
     left_y = content_y
@@ -285,7 +284,7 @@ def build_current_featured_section(card: CardData, x: int, y: int, width: int) -
         frag.append(_hline_v(divider_x, content_y - 4, section_end - 4, theme["muted"], opacity=0.25))
 
     y = section_end + SECTION_GAP
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_journey_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -295,7 +294,7 @@ def build_journey_section(card: CardData, x: int, y: int, width: int) -> Section
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "profile.journey", theme)
+    label, y = _section_label(x, y, "eznoamd.profile.journey", theme)
     frag.append(label)
 
     for entry in journey:
@@ -303,7 +302,7 @@ def build_journey_section(card: CardData, x: int, y: int, width: int) -> Section
         y += LINE_HEIGHT
     y += SECTION_GAP
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_organizations_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -313,7 +312,7 @@ def build_organizations_section(card: CardData, x: int, y: int, width: int) -> S
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "profile.organizations", theme)
+    label, y = _section_label(x, y, "eznoamd.profile.organizations", theme)
     frag.append(label)
 
     for org in orgs:
@@ -329,7 +328,7 @@ def build_organizations_section(card: CardData, x: int, y: int, width: int) -> S
         y += 6
     y += SECTION_GAP - 6
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_network_section(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -339,7 +338,7 @@ def build_network_section(card: CardData, x: int, y: int, width: int) -> Section
         return None, y
 
     frag = []
-    label, y = _section_label(x, y, "network.ports", theme)
+    label, y = _section_label(x, y, "eznoamd.network.ports", theme)
     frag.append(label)
 
     port_col, state_col, proto_col, label_col = 70, 50, 60, 90
@@ -356,7 +355,7 @@ def build_network_section(card: CardData, x: int, y: int, width: int) -> Section
         y += LINE_HEIGHT
     y += SECTION_GAP
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def build_footer(card: CardData, x: int, y: int, width: int) -> SectionResult:
@@ -372,26 +371,26 @@ def build_footer(card: CardData, x: int, y: int, width: int) -> SectionResult:
                        color=theme["muted"], anchor="middle"))
     y += 20
 
-    return "".join(frag), y
+    return "\n".join(frag), y
 
 
 def _wrap_svg(total_height: int, theme: dict, body: str) -> str:
     width = theme["width"]
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{total_height}" '
-        f'viewBox="0 0 {width} {total_height}">'
-        f'<style>text {{ font-family: {theme["font_family"]}; }}</style>'
-        f'<rect x="0" y="0" width="{width}" height="{total_height}" fill="{theme["background"]}" />'
-        f'<rect x="3" y="3" width="{width - 6}" height="{total_height - 6}" fill="none" '
-        f'stroke="{theme["muted"]}" stroke-opacity="0.5" stroke-width="1" rx="0" />'
-        f"{body}"
+        f'viewBox="0 0 {width} {total_height}">\n'
+        f'    <style>text {{ font-family: {theme["font_family"]}; }}</style>\n'
+        f'    <rect x="0" y="0" width="{width}" height="{total_height}" fill="{theme["background"]}" />\n'
+        f'    <rect x="3" y="3" width="{width - 6}" height="{total_height - 6}" fill="none" '
+        f'stroke="{theme["muted"]}" stroke-opacity="0.5" stroke-width="1" rx="0" />\n'
+        f"{body}\n"
         f"</svg>"
     )
 
 
 def _text(x, y, content, size=13, color="#ffffff", weight="normal", anchor="start") -> str:
     return (
-        f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" font-weight="{weight}" '
+        f'    <text x="{x:.1f}" y="{y:.1f}" font-size="{size}" font-weight="{weight}" '
         f'fill="{color}" text-anchor="{anchor}">{_escape(str(content))}</text>'
     )
 
@@ -399,30 +398,41 @@ def _text(x, y, content, size=13, color="#ffffff", weight="normal", anchor="star
 def _kv_text(x, y, label, value, theme, label_chars=14, size=12) -> str:
     padded = f"{label:<{label_chars}}"
     return (
-        f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}">'
-        f'<tspan fill="{theme["muted"]}">{_escape(padded)}</tspan>'
-        f'<tspan fill="{theme["foreground"]}">{_escape(str(value))}</tspan>'
-        f"</text>"
+        f'    <text x="{x:.1f}" y="{y:.1f}" font-size="{size}">\n'
+        f'        <tspan fill="{theme["muted"]}">{_escape(padded)}</tspan>\n'
+        f'        <tspan fill="{theme["foreground"]}">{_escape(str(value))}</tspan>\n'
+        f"    </text>"
     )
 
 
+_section_counter = 0
+
+
+def _reset_section_counter() -> None:
+    global _section_counter
+    _section_counter = 0
+
+
 def _section_label(x, y, key, theme) -> tuple[str, int]:
-    return _text(x, y + 13, f"> {key}", size=13, color=theme["accent_secondary"], weight="bold"), y + SECTION_LABEL_HEIGHT
+    global _section_counter
+    _section_counter += 1
+    label = f"[ {_section_counter} ] {key}"
+    return _text(x, y + 13, label, size=13, color=theme["accent_secondary"], weight="bold"), y + SECTION_LABEL_HEIGHT
 
 
 def _hline(x, y, width, color, opacity=0.5) -> str:
-    return f'<line x1="{x}" y1="{y}" x2="{x + width}" y2="{y}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
+    return f'    <line x1="{x}" y1="{y}" x2="{x + width}" y2="{y}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
 
 
 def _hline_v(x, y1, y2, color, opacity=0.5) -> str:
-    return f'<line x1="{x:.1f}" y1="{y1:.1f}" x2="{x:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
+    return f'    <line x1="{x:.1f}" y1="{y1:.1f}" x2="{x:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-width="1" opacity="{opacity}" />'
 
 
 def _bar(x, y, width, pct, theme, height=8) -> str:
     fill_w = max(0.0, min(float(width), width * pct / 100))
     return (
-        f'<rect x="{x:.1f}" y="{y:.1f}" width="{width:.1f}" height="{height}" fill="{theme["surface"]}" />'
-        f'<rect x="{x:.1f}" y="{y:.1f}" width="{fill_w:.1f}" height="{height}" fill="{theme["accent"]}" />'
+        f'    <rect x="{x:.1f}" y="{y:.1f}" width="{width:.1f}" height="{height}" fill="{theme["surface"]}" />\n'
+        f'    <rect x="{x:.1f}" y="{y:.1f}" width="{fill_w:.1f}" height="{height}" fill="{theme["accent"]}" />'
     )
 
 
