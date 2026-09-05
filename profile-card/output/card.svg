@@ -32,7 +32,7 @@
     </text>
     <text x="40.0" y="297.0" font-size="12">
         <tspan fill="#5c6b73">BUILD          </tspan>
-        <tspan fill="#d6e2e8">2026.09.05 14:20 UTC</tspan>
+        <tspan fill="#d6e2e8">2026.09.05 19:46 UTC</tspan>
     </text>
     <text x="40.0" y="317.0" font-size="12">
         <tspan fill="#5c6b73">UPTIME         </tspan>
@@ -160,5 +160,5 @@
     <text x="310.0" y="1293.0" font-size="12" font-weight="normal" fill="#5c6b73" text-anchor="start">enzo.domingues@acad.ufsm.br</text>
     <line x1="32" y1="1324" x2="768" y2="1324" stroke="#39d353" stroke-width="1" opacity="0.5" />
     <text x="400.0" y="1360.0" font-size="12" font-weight="bold" fill="#39d353" text-anchor="middle">[ SYSTEM READY ]</text>
-    <text x="400.0" y="1378.0" font-size="10" font-weight="normal" fill="#5c6b73" text-anchor="middle">GENERATED 2026-09-05 14:20 UTC</text>
+    <text x="400.0" y="1378.0" font-size="10" font-weight="normal" fill="#5c6b73" text-anchor="middle">GENERATED 2026-09-05 19:46 UTC</text>
 </svg>
